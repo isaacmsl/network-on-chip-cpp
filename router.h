@@ -3,6 +3,7 @@
 #define DEFAULT_QUEUE_SIZE 4
 
 #include <vector>
+#include "package.h"
 
 class Router {
  private:
@@ -10,7 +11,7 @@ class Router {
     int n_neighbours;
     int * neighbours;
     bool active;
-    int ** queues;  
+    Package ** queues;  
 
  public:
     int get_id() {return id;}
@@ -23,12 +24,12 @@ class Router {
         this->n_neighbours = 4;
         this->active = true;
         this->neighbours = new int[n_neighbours];
-        this->queues = new int*[n_neighbours];
+        this->queues = new Package*[n_neighbours];
 
-        for (int i{0};i < n_neighbours;i ++) {
+        for (int i{0};i < n_neighbours;++i) {
             this->neighbours[i] = neighbours[i];
             // TODO: Destructor
-            this->queues[i] = new int[queue_size];
+            this->queues[i] = new Package[queue_size];
         }
     }
 
