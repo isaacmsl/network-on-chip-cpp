@@ -3,6 +3,8 @@
 
 #include "router.h"
 
+class Router;
+
 class Mesh2D {
  private:
     Router *** mesh;
@@ -31,6 +33,22 @@ class Mesh2D {
             this->mesh[i][j] = new Router(j + i*w, neighbours);
         }
         }
+    }
+
+    void coord(int i, int *y, int *x) {
+        *y = i / this->w;
+        *x = i - (i / this->w) * this->h; 
+    }
+
+    void ask(int router, int router_queue) {
+        int y, x;
+        coord(router, &y, &x);
+        int ack = this->mesh[y][x].ack(router_queue);
+        std::cout << ack;
+    }
+
+    void get(int y, int x){
+        return this->mesh[y][x];
     }
 
     void set(Router * r, int h, int w) {
