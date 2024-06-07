@@ -15,7 +15,8 @@ class Router {
     Package *** queues;
 
  public:
-    int get_id() {return id;}
+
+    /// === Constructors ===
 
     Router() = default;
 
@@ -38,39 +39,62 @@ class Router {
         }
     }
 
-    void set(bool active) {
+    /// === Getters & Setters ===
+
+    int get_id() {return id;}
+
+    void set_active(bool active) {
         this->active = active;
     }
 
+    /// === Interaction with other Routers ===
+
     const void ask(int neighbour) const {
-        int neighbour_queue = this->n_neighbours - neighbour - 1;
-        this->neighbours[neighbour]->ack(neighbour_queue);
+        int neighbour_queue = n_neighbours - neighbour - 1;
+        neighbours[neighbour]->ack(neighbour_queue);
     }
 
-    const bool ack(int n) const {
-        return queues[n][this->queue_size-1] == NULL;
+    const bool ack(int q) const {
+        return queues[q][queue_size-1] == NULL;
     }
 
-    const char state() const {
-        if (!active) return 'x';
-        if (has_package()) return '0' + package_count();
-        return 'o';
+    void send_package(int neighbour, Package * package) {
+        int neighbour_queue = n_neighbours - neighbour - 1;
+
+        neighbours[neighbour]->add_to_queue(neighbour_queue, package);
     }
 
-    // add a package to some queue
-    void spawn_package(int2 destination, int body) {
-        add_package_to_queue(0, new Package(destination, body));
-    }
+    /// === Queue & Packages ===
 
-    void add_package_to_queue(int queue, Package * pack) {
+    void add_to_queue(int queue, Package * pack) {
         for (int i{0};i < queue_size;i ++) {
             if (queues[queue][i] == NULL) {
-                this->queues[queue][i] = pack;
+                queues[queue][i] = pack;
                 return;
             }
         }
 
         std::cout << "Vixe! O queue " << id << " tava cheio o_o\n";
+    }
+
+    void remove_from_queue(int queue, int pos) {
+        queues[queue][pos] == NULL;
+    }
+
+    void update_queue(int queue) {
+        for (int i{0};i < queue_size - 1;i ++) {
+            // removing empty spaces between packages in queue
+            if (queues[queue][i] == NULL && queues[queue][i + 1] != NULL) {
+                queues[queue][i] = queues[queue][i + 1];
+                queues[queue][i + 1] = NULL;
+            }
+        }
+    }
+
+    void update_queue() {
+        for (int i{0};i < n_neighbours;i ++) {
+            update_queue(i);
+        }
     }
 
     const bool has_package() const {
@@ -80,8 +104,8 @@ class Router {
     // number of packages in queue 'n'
     const int package_count(int n) const {
         int k = 0;
-        for (int j{0};j < this->queue_size;j ++) {
-            k += (this->queues[n][j] != NULL) ? 1 : 0;
+        for (int j{0};j < queue_size;j ++) {
+            k += (queues[n][j] != NULL) ? 1 : 0;
         }
 
         return k;
@@ -97,6 +121,13 @@ class Router {
         return k;
     }
 
+    // add a package to some queue
+    void spawn_package(int2 destination, int body) {
+        add_to_queue(0, new Package(destination, body));
+    }
+
+    /// === Destructor ===
+
     ~Router() {
         delete neighbours;
 
@@ -104,10 +135,18 @@ class Router {
         for (int j{0};j < queue_size;j ++) {
             delete queues[i][j]; // deleting packages
         } 
-            delete this->queues[i]; // deleting queues
+            delete queues[i]; // deleting queues
         }
 
-        delete this->queues; // deleting queue list
+        delete queues; // deleting queue list
+    }
+
+    /// === Cosmetics ===
+
+    const char state() const {
+        if (!active) return 'x';
+        if (has_package()) return '0' + package_count();
+        return 'o';
     }
 };
 
