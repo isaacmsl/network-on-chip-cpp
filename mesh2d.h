@@ -55,6 +55,10 @@ class Mesh2D {
         this->mesh[h][w] = r;
     }
 
+    void set_router_active(int y, int x, bool active) {
+        get(y, x)->set_active(active);
+    }
+
     void spawn_package(int y, int x, int2 destination, int body = 0) {
         get(y, x)->spawn_package(destination, body);
     }
