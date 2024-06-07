@@ -55,8 +55,17 @@ class Mesh2D {
         this->mesh[h][w] = r;
     }
 
-    const void print() const {
+    void spawn_package(int y, int x, int2 destination, int body = 0) {
+        get(y, x)->spawn_package(destination, body);
+    }
 
+    const void print() const {
+        for (int i{0};i < h;i ++) {
+        for (int j{0};j < w;j ++) {
+            std::cout << get(i, j)->state() << ' ';
+        }
+            std::cout << '\n';
+        }
     }
 
     ~Mesh2D() {

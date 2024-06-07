@@ -38,6 +38,10 @@ class Router {
         }
     }
 
+    void set(bool active) {
+        this->active = active;
+    }
+
     const void ask(int neighbour) const {
         int neighbour_queue = this->n_neighbours - neighbour - 1;
         this->neighbours[neighbour]->ack(neighbour_queue);
@@ -45,8 +49,47 @@ class Router {
 
     const bool ack(int n) const {return (queues[n][this->queue_size-1] == NULL);}
 
-    void set(bool active) {
-        this->active = active;
+    const char state() const {
+        if (!active) return 'x';
+        if (has_package()) return '0' + package_count();
+        return 'o';
+    }
+
+    void spawn_package(int2 destination, int body) {
+        add_package_to_queue(0, new Package(destination, body));
+    }
+
+    void add_package_to_queue(int queue, Package * pack) {
+        for (int i{0};i < queue_size;i ++) {
+            if (queues[queue][i] == NULL) {
+                this->queues[queue][i] = pack;
+                return;
+            }
+        }
+
+        std::cout << "Vixe! O queue " << id << " tava cheio o_o\n";
+    }
+
+    const bool has_package() const {
+        return package_count() != 0;
+    }
+
+    const int package_count(int n) const {
+        int k = 0;
+        for (int j{0};j < this->queue_size;j ++) {
+            k += (this->queues[n][j] != NULL) ? 1 : 0;
+        }
+
+        return k;
+    }
+
+    const int package_count() const {
+        int k = 0;
+        for (int i{0};i < n_neighbours;i ++) {
+            k += package_count(i);
+        }
+
+        return k;
     }
 
     ~Router() {
