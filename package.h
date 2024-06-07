@@ -14,9 +14,12 @@ class Package {
     int get_destination() {return destination;}
     int get_age() {return steps;}
 
-    Package() = default;
+    Package() {
+        this->destination = 4;
+    }
 
     Package(int destination, int body): destination{destination}, body{body}  {
+        this->destination = 4;
     }
 
 
