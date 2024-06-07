@@ -47,7 +47,9 @@ class Router {
         this->neighbours[neighbour]->ack(neighbour_queue);
     }
 
-    const bool ack(int n) const {return (queues[n][this->queue_size-1] == NULL);}
+    const bool ack(int n) const {
+        return queues[n][this->queue_size-1] == NULL;
+    }
 
     const char state() const {
         if (!active) return 'x';
@@ -55,6 +57,7 @@ class Router {
         return 'o';
     }
 
+    // add a package to some queue
     void spawn_package(int2 destination, int body) {
         add_package_to_queue(0, new Package(destination, body));
     }
@@ -74,6 +77,7 @@ class Router {
         return package_count() != 0;
     }
 
+    // number of packages in queue 'n'
     const int package_count(int n) const {
         int k = 0;
         for (int j{0};j < this->queue_size;j ++) {
@@ -83,6 +87,7 @@ class Router {
         return k;
     }
 
+    // number of packages in total
     const int package_count() const {
         int k = 0;
         for (int i{0};i < n_neighbours;i ++) {
