@@ -1,9 +1,7 @@
 #ifndef ROUTER_H
 #define ROUTER_H
 
-#include <vector>
 #include "package.h"
-#include "mesh2d.h"
 
 #define DEFAULT_QUEUE_SIZE 4
 
@@ -12,8 +10,8 @@ class Router {
     int id;
     int queue_size;
     int n_neighbours;
-    Router ** neighbours;
     bool active;
+    Router ** neighbours;
     Package *** queues;
 
  public:
@@ -40,12 +38,12 @@ class Router {
         }
     }
 
-    void ask(int neighbour){
+    const void ask(int neighbour) const {
         int neighbour_queue = this->n_neighbours - neighbour - 1;
         this->neighbours[neighbour]->ack(neighbour_queue);
     }
 
-    bool ack(int n){return (queues[n][this->queue_size-1] == NULL);}
+    const bool ack(int n) const {return (queues[n][this->queue_size-1] == NULL);}
 
     void set(bool active) {
         this->active = active;

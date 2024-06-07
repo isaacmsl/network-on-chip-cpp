@@ -46,13 +46,17 @@ class Mesh2D {
         }
     }
 
-    Router * get(int y, int x){
+    Router * get(int y, int x) const {
         return this->mesh[y][x];
     }
 
     void set(Router * r, int h, int w) {
         delete this->mesh[h][w];
         this->mesh[h][w] = r;
+    }
+
+    const void print() const {
+
     }
 
     ~Mesh2D() {
