@@ -49,9 +49,9 @@ class Router {
 
     /// === Interaction with other Routers ===
 
-    const void ask(int neighbour) const {
+    const bool ask(int neighbour) const {
         int neighbour_queue = n_neighbours - neighbour - 1;
-        neighbours[neighbour]->ack(neighbour_queue);
+        return neighbours[neighbour]->ack(neighbour_queue);
     }
 
     const bool ack(int q) const {
