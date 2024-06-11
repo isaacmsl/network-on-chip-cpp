@@ -79,6 +79,7 @@ class Router {
 
     void remove_from_queue(int queue, int pos) {
         queues[queue][pos] == NULL;
+        update_queue(queue);
     }
 
     void update_queue(int queue) {
