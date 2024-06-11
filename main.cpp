@@ -34,7 +34,8 @@ int main() {
                 // Next Step
                 case 0:
                     next_step = true;
-                    step ++;
+                    ++step;
+                    m.step();
                     break;
 
                 // Insert Package

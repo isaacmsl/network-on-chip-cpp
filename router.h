@@ -8,6 +8,7 @@
 class Router {
  private:
     int id;
+    int2 pos;
     int queue_size;
     int n_neighbours;
     bool active;
@@ -20,8 +21,9 @@ class Router {
 
     Router() = default;
 
-    Router(int id, Router ** neighbours, int queue_size = DEFAULT_QUEUE_SIZE) {
+    Router(int id, int2 pos, Router ** neighbours, int queue_size = DEFAULT_QUEUE_SIZE) {
         this->id = id;
+        this->pos = pos;
         this->n_neighbours = 4;
         this->active = true;
         this->queue_size = queue_size;
@@ -64,7 +66,47 @@ class Router {
         neighbours[neighbour]->add_to_queue(neighbour_queue, package);
     }
 
+    void judge() {
+        for (int i{0}; i < n_neighbours; ++i) {
+            if (package_count(i)) {
+                int pkg_pos = 0;
+                auto package = get_senior_package_in_queue(i, &pkg_pos);
+                auto dest = package->get_destination();
+
+                const auto dy = dest[0] - pos[0];
+                const auto dx = dest[1] - pos[1];
+
+                if (dy != 0) {
+                    send_package(dy > 0 ? 2 : 0, package);
+                    remove_from_queue(i, pkg_pos);
+                }
+                else if (dx != 0) {
+                    send_package(dx > 0 ? 1 : 3, package);
+                    remove_from_queue(i, pkg_pos);
+                }
+                else {
+                    std::cout << "Gatão\n";
+                    delete package;
+                }
+
+            }
+        }
+
+    }
+
     /// === Queue & Packages ===
+
+    Package * get_senior_package_in_queue(int queue, int * pos) {
+        auto senior = queues[queue][0];
+        for (int j{0}; j < package_count(queue); ++j) {
+            auto package = queues[queue][j];
+            if (package->get_age() > senior->get_age()) {
+                senior = package;
+                *pos = j;
+            }
+        }
+        return senior;
+    }
 
     void add_to_queue(int queue, Package * pack) {
         for (int i{0};i < queue_size;i ++) {

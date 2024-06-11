@@ -41,7 +41,7 @@ class Mesh2D {
                 W >= 0 ? get(i + 0, j - 1) : NULL
             };
 
-            this->mesh[i][j] = new Router(j + i*w, neighbours);
+            this->mesh[i][j] = new Router(j + i*w, int2{j,i}, neighbours);
         }
         }
     }
@@ -69,6 +69,14 @@ class Mesh2D {
             std::cout << get(i, j)->state() << ' ';
         }
             std::cout << '\n';
+        }
+    }
+
+    void step() {
+        for(int i{0}; i < h; ++i) {
+            for (int j{0}; j < w; ++j) {
+                get(i, j)->judge();
+            }
         }
     }
 
