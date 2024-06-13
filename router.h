@@ -14,6 +14,8 @@ class Router {
     bool active;
     Router ** neighbours;
     Package *** queues;
+    int * questions;
+    bool * answers;
 
  public:
 
@@ -21,18 +23,17 @@ class Router {
 
     Router() = default;
 
-    Router(int id, int2 pos, Router ** neighbours, int queue_size = DEFAULT_QUEUE_SIZE) {
+    Router(int id, int2 pos, int queue_size = DEFAULT_QUEUE_SIZE) {
         this->id = id;
         this->pos = pos;
         this->n_neighbours = 4;
         this->active = true;
         this->queue_size = queue_size;
-        this->neighbours = new Router*[n_neighbours];
         this->queues = new Package**[n_neighbours];
+        this->questions = new int[n_neighbours];
+        this->answers = new bool[n_neighbours];
 
         for (int i{0};i < n_neighbours;++i) {
-            this->neighbours[i] = neighbours[i];
-
             // Loading queues with null packages
             this->queues[i] = new Package*[this->queue_size];
             for (int j{0};j < this->queue_size;j ++) {
@@ -49,21 +50,36 @@ class Router {
         this->active = active;
     }
 
-    /// === Interaction with other Routers ===
+    void set_neighbours(Router ** neighbours) {
+        this->neighbours = new Router*[this->n_neighbours];
 
-    const bool ask(int neighbour) const {
-        int neighbour_queue = n_neighbours - neighbour - 1;
-        return neighbours[neighbour]->ack(neighbour_queue);
+        for (int i{0};i < this->n_neighbours;++i) {
+            this->neighbours[i] = neighbours[i];
+        }
     }
 
-    const bool ack(int q) const {
-        return queues[q][queue_size-1] == NULL;
+    /// === Interaction with other Routers ===
+
+    const void add_question(int queue) {
+        this->questions[queue] = 1;
+    }
+
+    const void ask(int neighbour) const {
+        int neighbour_queue = (neighbour + 2) % 4;
+        neighbours[neighbour]->add_question(neighbour_queue);
+    }
+
+    const bool ack() const {
+        for (int i{0};i < this->n_neighbours;++i) {
+            bool is_gate_available = queues[i][queue_size-1] == NULL;
+            this->answers[i] = is_gate_available;
+        }
     }
 
     void send_package(int neighbour, Package * package) {
-        int neighbour_queue = n_neighbours - neighbour - 1;
-
-        neighbours[neighbour]->add_to_queue(neighbour_queue, package);
+        int neighbour_queue = (neighbour + 2) % 4;
+        if (neighbours[neighbour] != NULL)
+            neighbours[neighbour]->add_to_queue(neighbour_queue, package);
     }
 
     void judge() {
