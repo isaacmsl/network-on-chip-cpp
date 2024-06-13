@@ -25,13 +25,17 @@ class Mesh2D {
 
         // Creating Routers
 
-        for (int i{0};i < h;i ++) {
-        for (int j{0};j < w;j ++) {
+        for (int i{0};i < h;++i) {
+        for (int j{0};j < w;++j) {
+            this->mesh[i][j] = new Router(j + i*w, int2{j,i});
+        }}
 
-            int N = i > 0 ? j + (i - 1)*w : -1,
-                E = j < w - 1 ? j + 1 + i*w : -1,
-                S = i < h - 1 ? j + (i + 1)*w : -1,
-                W = j > 0 ? j - 1 + i*w : -1;
+        for (int i{0};i < h;++i) {
+        for (int j{0};j < w;++j) {
+            int N = i > 0 ? 1 : -1,
+                E = j < w - 1 ? 1 : -1,
+                S = i < h - 1 ? 1 : -1,
+                W = j > 0 ? 1 : -1;
             
             // Clock-wise
             Router * neighbours[4] = {
@@ -41,9 +45,8 @@ class Mesh2D {
                 W >= 0 ? get(i + 0, j - 1) : NULL
             };
 
-            this->mesh[i][j] = new Router(j + i*w, int2{j,i}, neighbours);
-        }
-        }
+            get(i, j)->set_neighbours(neighbours);
+        }}
     }
 
     Router * get(int y, int x) const {
