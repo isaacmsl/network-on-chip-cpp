@@ -1,6 +1,8 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
+namespace noc {
+
 class Package {
  private:
     int2 destination;
@@ -17,5 +19,7 @@ class Package {
 
     void age() {this->steps++;}
 };
+
+}
 
 #endif

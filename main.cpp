@@ -1,17 +1,9 @@
-#include <iostream>
-#include <array>
-
-using int2 = std::array<int, 2>;
-
-enum dir {
-    N, E, S, W
-};
-
+#include "global.h"
 #include "mesh2d.h"
 
 int main() {
 
-    Mesh2D m = Mesh2D(8, 8);
+    noc::Mesh2D m = noc::Mesh2D(8, 8);
     bool quit = false;
     int step = 0;
 

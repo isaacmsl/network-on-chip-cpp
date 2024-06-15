@@ -3,7 +3,7 @@
 
 #include "router.h"
 
-class Router;
+namespace noc {
 
 class Mesh2D {
  private:
@@ -97,5 +97,5 @@ class Mesh2D {
     }
 
 };
-
+}
 #endif

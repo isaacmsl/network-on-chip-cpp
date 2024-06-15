@@ -1,9 +1,11 @@
 #ifndef ROUTER_H
 #define ROUTER_H
 
+#define DEFAULT_QUEUE_SIZE 4
+
 #include "package.h"
 
-#define DEFAULT_QUEUE_SIZE 4
+namespace noc {
 
 class Router {
  private:
@@ -17,9 +19,10 @@ class Router {
 
  public:
 
-    // Acessed by other Routers; index is wich neighbour...
-    bool * questions;//...asked
-    bool * answers;//...answered
+    // Accessed by other Routers.
+    // array index is wich neighbour...
+    bool * questions;// ...asked
+    bool * answers;// ...answered
 
     /// === Constructors ===
 
@@ -70,13 +73,14 @@ class Router {
     }
 
     // fills answer array 
-    const void ack() {
+    const void ack() const {
     for (int i{0};i < this->n_neighbours;++i) {
-    if (this->questions[i] == true) { /// has to be == true ?!??
-        bool is_gate_available = (queues[i][queue_size-1] == NULL);
-        neighbours[i]->answers[fx(i)] = is_gate_available;
-        questions[i] = false;
-    }}}
+        if (this->questions[i]) {
+            bool is_gate_available = (queues[i][queue_size-1] == NULL);
+            neighbours[i]->answers[fx(i)] = is_gate_available;
+            questions[i] = false;
+        }
+    }}
 
     void send_package(int neighbour, Package * package) {
         int neighbour_queue = fx(neighbour);
@@ -86,53 +90,34 @@ class Router {
 
     void step() {
     for (int i{0}; i < n_neighbours; ++i) {
-        if (package_count(i)) {judge(i);}
+        if (package_count(i)) {process_pkg(i);}
         answers[fx(i)] = false;
     }}
 
-    void judge(int gate) {
+    void process_pkg(int gate) {
+
+        // Getting Package
         auto package = get_senior_package_in_queue(gate);
         auto dest = package->get_destination();
 
         const auto dy = dest[0] - pos[0];
         const auto dx = dest[1] - pos[1];
 
-        // Package arrived
+        // Package arrived at final destination
         if (dy == 0 && dx == 0) {
-            std::cout << "Gatão\n";
+            std::cout << "Gatão pego!\n";
             remove_from_queue(gate, package);
             delete package;
             return;
         }
 
-        // Deciding where to send
-
-        dir send_dir = get_send_dir(dy, dx);
-
-        if (answers[send_dir] == true) {
-            send_package(send_dir, package);
-            remove_from_queue(gate, package);
-            return;
-        }
-        // TODO: smarter logic
-
-        ask(send_dir);
+        // Passing package to next router
+        judge(dy, dx, gate, package);
     }
 
-    const dir get_send_dir(int dy, int dx) const {
-        dir return_dir;
+    void judge(int dy, int dx, int gate, Package * package);
 
-        if (dy != 0) {
-            return_dir = dy > 0 ? S : N;
-        }
-        else if (dx != 0) {
-            return_dir = dx > 0 ? E : W;
-        }
-
-        std::cout << dy << " "<< dx << " " << return_dir << '\n';
-
-        return return_dir;
-    }
+    const dir get_send_dir(int dy, int dx) const;
 
     /// === Queue & Packages ===
 
@@ -231,6 +216,7 @@ class Router {
         if (has_package()) return '0' + package_count();
         return 'o';
     }
-};
 
+};
+}
 #endif
