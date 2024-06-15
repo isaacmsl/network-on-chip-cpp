@@ -14,10 +14,12 @@ class Router {
     bool active;
     Router ** neighbours;
     Package *** queues;
-    int * questions;
-    bool * answers;
 
  public:
+
+    // Acessed by other Routers; index is wich neighbour...
+    bool * questions;//...asked
+    bool * answers;//...answered
 
     /// === Constructors ===
 
@@ -30,12 +32,14 @@ class Router {
         this->active = true;
         this->queue_size = queue_size;
         this->queues = new Package**[n_neighbours];
-        this->questions = new int[n_neighbours];
+        this->questions = new bool[n_neighbours];
         this->answers = new bool[n_neighbours];
 
         for (int i{0};i < n_neighbours;++i) {
             // Loading queues with null packages
             this->queues[i] = new Package*[this->queue_size];
+            this->questions[i] = false;
+            this->answers[i] = false;
             for (int j{0};j < this->queue_size;j ++) {
                 this->queues[i][j] = NULL;
             }
@@ -58,63 +62,86 @@ class Router {
 
     /// === Interaction with other Routers ===
 
-    const void add_question(int queue) {this->questions[queue] = true;}
+    const int fx(int neighbour) const {return (neighbour + 2) % 4;}
 
-    const void ask(int neighbour) const {
-        int neighbour_queue = (neighbour + 2) % 4;
-        neighbours[neighbour]->add_question(neighbour_queue);
+    const void ask(int neighbour) const{
+        int neighbour_queue = fx(neighbour);
+        neighbours[neighbour]->questions[neighbour_queue] = true;
     }
 
-    const bool ack() const {
-        for (int i{0};i < this->n_neighbours;++i) {
-            bool is_gate_available = queues[i][queue_size-1] == NULL;
-            this->answers[i] = is_gate_available;
-        }
-    }
+    // fills answer array 
+    const void ack() {
+    for (int i{0};i < this->n_neighbours;++i) {
+    if (this->questions[i] == true) { /// has to be == true ?!??
+        bool is_gate_available = (queues[i][queue_size-1] == NULL);
+        neighbours[i]->answers[fx(i)] = is_gate_available;
+        questions[i] = false;
+    }}}
 
     void send_package(int neighbour, Package * package) {
-        int neighbour_queue = (neighbour + 2) % 4;
+        int neighbour_queue = fx(neighbour);
         if (neighbours[neighbour] != NULL)
             neighbours[neighbour]->add_to_queue(neighbour_queue, package);
     }
 
-    void judge() {
-        for (int i{0}; i < n_neighbours; ++i) {
-            if (package_count(i)) {
-                int pkg_pos = 0;
-                auto package = get_senior_package_in_queue(i, &pkg_pos);
-                auto dest = package->get_destination();
+    void step() {
+    for (int i{0}; i < n_neighbours; ++i) {
+        if (package_count(i)) {judge(i);}
+        answers[fx(i)] = false;
+    }}
 
-                const auto dy = dest[0] - pos[0];
-                const auto dx = dest[1] - pos[1];
+    void judge(int gate) {
+        auto package = get_senior_package_in_queue(gate);
+        auto dest = package->get_destination();
 
-                if (dy != 0) {
-                    send_package(dy > 0 ? 2 : 0, package);
-                    remove_from_queue(i, pkg_pos);
-                }
-                else if (dx != 0) {
-                    send_package(dx > 0 ? 1 : 3, package);
-                    remove_from_queue(i, pkg_pos);
-                }
-                else {
-                    std::cout << "Gatão\n";
-                    delete package;
-                }
+        const auto dy = dest[0] - pos[0];
+        const auto dx = dest[1] - pos[1];
 
-            }
+        // Package arrived
+        if (dy == 0 && dx == 0) {
+            std::cout << "Gatão\n";
+            remove_from_queue(gate, package);
+            delete package;
+            return;
         }
+
+        // Deciding where to send
+
+        dir send_dir = get_send_dir(dy, dx);
+
+        if (answers[send_dir] == true) {
+            send_package(send_dir, package);
+            remove_from_queue(gate, package);
+            return;
+        }
+        // TODO: smarter logic
+
+        ask(send_dir);
+    }
+
+    const dir get_send_dir(int dy, int dx) const {
+        dir return_dir;
+
+        if (dy != 0) {
+            return_dir = dy > 0 ? S : N;
+        }
+        else if (dx != 0) {
+            return_dir = dx > 0 ? E : W;
+        }
+
+        std::cout << dy << " "<< dx << " " << return_dir << '\n';
+
+        return return_dir;
     }
 
     /// === Queue & Packages ===
 
-    Package * get_senior_package_in_queue(int queue, int * pos) {
+    Package * get_senior_package_in_queue(int queue) {
         auto senior = queues[queue][0];
         for (int j{0}; j < package_count(queue); ++j) {
             auto package = queues[queue][j];
-            if (package->get_age() > senior->get_age()) {
+            if (package->get_age() > senior->get_age())
                 senior = package;
-                *pos = j;
-            }
         }
         return senior;
     }
@@ -131,8 +158,17 @@ class Router {
     }
 
     void remove_from_queue(int queue, int pos) {
-        queues[queue][pos] == NULL;
+        queues[queue][pos] = NULL;
         update_queue(queue);
+    }
+
+    void remove_from_queue(int queue, Package * pack) {
+        for (int i = 0;i < queue_size;i ++) {
+            if (queues[queue][i] == pack) {
+                remove_from_queue(queue, i);
+                break;
+            }
+        }
     }
 
     void update_queue(int queue) {

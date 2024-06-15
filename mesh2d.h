@@ -27,22 +27,22 @@ class Mesh2D {
 
         for (int i{0};i < h;++i) {
         for (int j{0};j < w;++j) {
-            this->mesh[i][j] = new Router(j + i*w, int2{j,i});
+            this->mesh[i][j] = new Router(j + i*w, int2{i,j});
         }}
 
         for (int i{0};i < h;++i) {
         for (int j{0};j < w;++j) {
-            int N = i > 0 ? 1 : -1,
-                E = j < w - 1 ? 1 : -1,
-                S = i < h - 1 ? 1 : -1,
-                W = j > 0 ? 1 : -1;
+            bool N = i > 0,
+                E = j < w - 1,
+                S = i < h - 1,
+                W = j > 0;
             
             // Clock-wise
             Router * neighbours[4] = {
-                N >= 0 ? get(i - 1, j + 0) : NULL,
-                E >= 0 ? get(i + 0, j + 1) : NULL,
-                S >= 0 ? get(i + 1, j + 0) : NULL,
-                W >= 0 ? get(i + 0, j - 1) : NULL
+                N ? get(i - 1, j + 0) : NULL,
+                E ? get(i + 0, j + 1) : NULL,
+                S ? get(i + 1, j + 0) : NULL,
+                W ? get(i + 0, j - 1) : NULL
             };
 
             get(i, j)->set_neighbours(neighbours);
@@ -72,11 +72,18 @@ class Mesh2D {
     }
 
     void step() {
+
+        // step
         for(int i{0}; i < h; ++i) {
-            for (int j{0}; j < w; ++j) {
-                get(i, j)->judge();
-            }
-        }
+        for (int j{0}; j < w; ++j) {
+            get(i, j)->step();
+        }}
+
+        // post-step
+        for(int i{0}; i < h; ++i) {
+        for (int j{0}; j < w; ++j) {
+            get(i, j)->ack();
+        }}
     }
 
     ~Mesh2D() {
