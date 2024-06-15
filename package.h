@@ -15,9 +15,7 @@ class Package {
 
     Package(int2 destination, int body): destination{destination}, body{body} {};
 
-    void age() {
-        this->steps++;
-    }
+    void age() {this->steps++;}
 };
 
 #endif

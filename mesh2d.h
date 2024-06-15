@@ -49,9 +49,7 @@ class Mesh2D {
         }}
     }
 
-    Router * get(int y, int x) const {
-        return this->mesh[y][x];
-    }
+    Router * get(int y, int x) const {return this->mesh[y][x];}
 
     void set(Router * r, int h, int w) {
         delete this->mesh[h][w];
@@ -59,12 +57,10 @@ class Mesh2D {
     }
 
     void set_router_active(int y, int x, bool active) {
-        get(y, x)->set_active(active);
-    }
+        get(y, x)->set_active(active);}
 
     void spawn_package(int y, int x, int2 destination, int body = 0) {
-        get(y, x)->spawn_package(destination, body);
-    }
+        get(y, x)->spawn_package(destination, body);}
 
     const void print() const {
         for (int i{0};i < h;i ++) {
