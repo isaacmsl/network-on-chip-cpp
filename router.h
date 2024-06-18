@@ -25,6 +25,8 @@ class Router {
     Router ** neighbours;
     Package *** queues;
     SendInfo ** sends;
+    bool * asked;
+    int * attempts;
 
  public:
 
@@ -47,6 +49,8 @@ class Router {
         this->questions = new bool[n_neighbours];
         this->answers = new bool[n_neighbours];
         this->sends = new SendInfo*[n_neighbours];
+        this->asked = new bool[n_neighbours];
+        this->attempts = new int[n_neighbours];
 
         for (int i{0};i < n_neighbours;++i) {
             // Loading queues with null packages
@@ -82,19 +86,21 @@ class Router {
     //  isaac.passar_pix_to(carlos, pow(2, 10))
     //}
 
-    const void ask(int neighbour) const{
+    const void ask(int neighbour) const {
         int neighbour_queue = fx(neighbour);
         neighbours[neighbour]->questions[neighbour_queue] = true;
+        asked[neighbour] = true;
     }
 
     // fills answer array 
     const void ack() const {
     for (int i{0};i < this->n_neighbours;++i) {
-        if (this->questions[i]) {
+        if (active && this->questions[i]) {
             bool is_gate_available = (queues[i][queue_size-1] == NULL);
             neighbours[i]->answers[fx(i)] = is_gate_available;
             questions[i] = false;
         }
+        if (!active) questions[i] = false;
     }}
 
     void send_package(int neighbour, Package * package) {
@@ -146,6 +152,10 @@ class Router {
     void judge(int dy, int dx, int gate, Package * package);
 
     const dir get_send_dir(int dy, int dx) const;
+
+    void try_send(dir send_dir, int gate, Package * package);
+
+    dir get_closest_gate(int gate, int dy, int dx);
 
     /// === Queue & Packages ===
 
