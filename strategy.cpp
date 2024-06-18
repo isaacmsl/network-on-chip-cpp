@@ -9,8 +9,8 @@ void Router::judge(int dy, int dx, int gate, Package * package) {
     dir send_dir = get_send_dir(dy, dx);
 
     if (answers[send_dir]) {
-        send_package(send_dir, package);
-        remove_from_queue(gate, package);
+        sends[gate] = new SendInfo(send_dir, package);
+        answers[send_dir] = false;
         return;
     }
     // TODO: smarter logic
@@ -34,3 +34,8 @@ const dir Router::get_send_dir(int dy, int dx) const {
 }
 
 }
+
+/*
+send_package(send_dir, package);
+        remove_from_queue(gate, package);
+        */

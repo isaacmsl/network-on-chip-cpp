@@ -7,6 +7,14 @@
 
 namespace noc {
 
+struct SendInfo {
+    dir send_dir;
+    Package * pkg;
+
+    SendInfo(dir send_dir, Package * pkg) : send_dir{send_dir}, pkg{pkg} {}
+    SendInfo() = default;
+};
+
 class Router {
  private:
     int id;
@@ -16,6 +24,7 @@ class Router {
     bool active;
     Router ** neighbours;
     Package *** queues;
+    SendInfo ** sends;
 
  public:
 
@@ -37,6 +46,7 @@ class Router {
         this->queues = new Package**[n_neighbours];
         this->questions = new bool[n_neighbours];
         this->answers = new bool[n_neighbours];
+        this->sends = new SendInfo*[n_neighbours];
 
         for (int i{0};i < n_neighbours;++i) {
             // Loading queues with null packages
@@ -65,7 +75,12 @@ class Router {
 
     /// === Interaction with other Routers ===
 
+    // try {
     const int fx(int neighbour) const {return (neighbour + 2) % 4;}
+    // }
+    // catch(ISAAC.reclamação reclamação_de_nome) {
+    //  isaac.passar_pix_to(carlos, pow(2, 10))
+    //}
 
     const void ask(int neighbour) const{
         int neighbour_queue = fx(neighbour);
@@ -90,8 +105,21 @@ class Router {
 
     void step() {
     for (int i{0}; i < n_neighbours; ++i) {
-        if (package_count(i)) {process_pkg(i);}
-        answers[fx(i)] = false;
+
+        if (package_count(i)) {
+            std::cout << id << " " << i << " " << questions[i] << '\n';
+            std::cout << id << " " << i << " " << answers[i] << '\n';
+            process_pkg(i);
+        }
+    }}
+
+    void send() {
+    for (int i{0}; i < n_neighbours; ++i) {
+        if (sends[i] != NULL) {
+            send_package(sends[i]->send_dir, sends[i]->pkg);
+            remove_from_queue(i, sends[i]->pkg);
+            sends[i] = NULL;
+        }
     }}
 
     void process_pkg(int gate) {
@@ -105,7 +133,7 @@ class Router {
 
         // Package arrived at final destination
         if (dy == 0 && dx == 0) {
-            std::cout << "Gatão pego!\n";
+            std::cout << "Gatão pego! " << package->get_body() << "\n";
             remove_from_queue(gate, package);
             delete package;
             return;

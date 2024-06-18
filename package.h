@@ -12,6 +12,7 @@ class Package {
  public:
     const int2 get_destination() const {return destination;}
     const int get_age() const {return steps;}
+    const int get_body() const {return body;}
 
     Package() = default;
 

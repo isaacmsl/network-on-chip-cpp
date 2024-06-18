@@ -79,6 +79,12 @@ class Mesh2D {
             get(i, j)->step();
         }}
 
+        // mid-step
+        for(int i{0}; i < h; ++i) {
+        for (int j{0}; j < w; ++j) {
+            get(i, j)->send();
+        }}
+
         // post-step
         for(int i{0}; i < h; ++i) {
         for (int j{0}; j < w; ++j) {
