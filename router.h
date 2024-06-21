@@ -57,6 +57,7 @@ class Router {
             this->queues[i] = new Package*[this->queue_size];
             this->questions[i] = false;
             this->answers[i] = false;
+            this->sends[i] = NULL;
             for (int j{0};j < this->queue_size;j ++) {
                 this->queues[i][j] = NULL;
             }
@@ -119,6 +120,7 @@ class Router {
     void send() {
     for (int i{0}; i < n_neighbours; ++i) {
         if (sends[i] != NULL) {
+            std::cout << "did it " << id << '\n';
             send_package(sends[i]->send_dir, sends[i]->pkg);
             remove_from_queue(i, sends[i]->pkg);
             sends[i] = NULL;
@@ -153,7 +155,7 @@ class Router {
 
     void try_send(dir send_dir, int gate, Package * package);
 
-    dir get_closest_gate(int gate, int dy, int dx);
+    dir get_closest_gate(int dy, int dx);
 
     /// === Queue & Packages ===
 

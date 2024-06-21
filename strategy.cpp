@@ -24,22 +24,18 @@ int gy(int g) {
     return g == 0 ? -1 : 1;
 }
 
-dir Router::get_closest_gate(int gate, int dy, int dx) {
+// returns the direction of the closest gate from 'gate' to 'dy dx'
+dir Router::get_closest_gate(int dy, int dx) {
 
-    int shortest_dis = 0;
-    int closest_gate = 0;
+    if (dy > 0) { // W, E or S
 
-    for (int i{0};i < n_neighbours;i ++) {
-        if (i == gate) continue;
+        if (dx > 0) {return dx > dy ? E : S;} // E or S
+        else {return -dx > dy ? W : S;} // W or S
 
-        int dx_ = dx - (id + gx(i));
-        int dy_ = dy - (id + gy(i));
+    } else  { // W, E or N
 
-        int new_dis = dx_*dx_ + dy_*dy_; 
-
-        if (shortest_dis < new_dis) {
-            // TODO: Everything
-        }
+        if (dx > 0) {return dx > -dy ? E : N;} // E or N
+        else {return -dx > -dy ? W : N;} // W or N
     }
 }
 
@@ -60,7 +56,7 @@ void Router::judge(int dy, int dx, int gate, Package * package) {
         switch(attempts[gate]) {
         //attempts #1 (Isaac's strategy TM)
             case 0:
-                send_dir = get_closest_gate(gate, dy, dx);
+                send_dir = get_closest_gate(dy, dx);
                 try_send(send_dir, gate, package);
                 break;
 
