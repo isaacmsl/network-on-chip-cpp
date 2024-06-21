@@ -4,7 +4,6 @@
 
 namespace noc {
 
-
 void Router::try_send(dir send_dir, int gate, Package * package) {
     if (answers[send_dir]) {
         sends[gate] = new SendInfo(send_dir, package);
@@ -13,14 +12,16 @@ void Router::try_send(dir send_dir, int gate, Package * package) {
     }
 }
 
-int gx(int a) {
-    if (a % 2 == 0) return 0;
-    return a == 1 ? 1 : -1;
+// returns whether the g'th gate is to the left or right
+int gx(int g) {
+    if (g % 2 == 0) return 0;
+    return g == 1 ? 1 : -1;
 }
 
-int gy(int a) {
-    if (a % 2 == 1) return 0;
-    return a == 0 ? -1 : 1;
+// returns whether the g'th gate is above or below
+int gy(int g) {
+    if (g % 2 == 1) return 0;
+    return g == 0 ? -1 : 1;
 }
 
 dir Router::get_closest_gate(int gate, int dy, int dx) {
@@ -83,8 +84,3 @@ const dir Router::get_send_dir(int dy, int dx) const {
 }
 
 }
-
-/*
-send_package(send_dir, package);
-        remove_from_queue(gate, package);
-        */

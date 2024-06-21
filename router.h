@@ -79,12 +79,9 @@ class Router {
 
     /// === Interaction with other Routers ===
 
-    // try {
+    // Gets index of the 'neighbour' gate that is facing
+    // towards this router.
     const int fx(int neighbour) const {return (neighbour + 2) % 4;}
-    // }
-    // catch(ISAAC.reclamação reclamação_de_nome) {
-    //  isaac.passar_pix_to(carlos, pow(2, 10))
-    //}
 
     const void ask(int neighbour) const {
         int neighbour_queue = fx(neighbour);
@@ -103,22 +100,22 @@ class Router {
         if (!active) questions[i] = false;
     }}
 
+    // sends 'package' to 'neighbour'
     void send_package(int neighbour, Package * package) {
         int neighbour_queue = fx(neighbour);
         if (neighbours[neighbour] != NULL)
             neighbours[neighbour]->add_to_queue(neighbour_queue, package);
     }
 
+    // router logic
     void step() {
     for (int i{0}; i < n_neighbours; ++i) {
-
         if (package_count(i)) {
-            std::cout << id << " " << i << " " << questions[i] << '\n';
-            std::cout << id << " " << i << " " << answers[i] << '\n';
             process_pkg(i);
         }
     }}
 
+    // sends pending packages in 'sends' array
     void send() {
     for (int i{0}; i < n_neighbours; ++i) {
         if (sends[i] != NULL) {
@@ -128,6 +125,7 @@ class Router {
         }
     }}
 
+    // Receives a package and decides where the others should go
     void process_pkg(int gate) {
 
         // Getting Package
