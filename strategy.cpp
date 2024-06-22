@@ -40,9 +40,11 @@ dir Router::get_closest_gate(int dy, int dx) {
     }
 }
 
+static dir last_dir;
+
 dir Router::strategy(int gate, int dy, int dx) {
 
-    dir send_dir;
+    dir send_dir = last_dir;
 
     switch(attempts[gate]) {
         case 0:
@@ -52,7 +54,12 @@ dir Router::strategy(int gate, int dy, int dx) {
         case 1:
             send_dir = get_closest_gate(dy, dx);
             break;
+        //attempts #2 (Carlos's strategy™)
         case 2:
+            for (int i{0};i < 4;i ++) {
+            if (i != gate && !asked[i]) {
+                send_dir = (dir) i;
+            }}
             break;
     }
 
@@ -76,6 +83,7 @@ void Router::judge(int dy, int dx, int gate, Package * package) {
     send_dir = strategy(gate, dy, dx);
     ask(send_dir);
     asked[send_dir] = true;
+    last_dir = send_dir;
 }
 
 const dir Router::get_send_dir(int dy, int dx) const {
