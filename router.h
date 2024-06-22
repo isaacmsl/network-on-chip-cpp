@@ -58,6 +58,8 @@ class Router {
             this->questions[i] = false;
             this->answers[i] = false;
             this->sends[i] = NULL;
+            this->asked[i] = false;
+            this->attempts[i] = 0;
             for (int j{0};j < this->queue_size;j ++) {
                 this->queues[i][j] = NULL;
             }
@@ -85,9 +87,13 @@ class Router {
     const int fx(int neighbour) const {return (neighbour + 2) % 4;}
 
     const void ask(int neighbour) const {
-        int neighbour_queue = fx(neighbour);
-        neighbours[neighbour]->questions[neighbour_queue] = true;
-        asked[neighbour] = true;
+        if (neighbours[neighbour] != NULL) {
+            int neighbour_queue = fx(neighbour);
+            neighbours[neighbour]->questions[neighbour_queue] = true;
+        }
+        else {
+            std::cout << "Non-existent neighbour\n";
+        }
     }
 
     // fills answer array 
@@ -153,7 +159,9 @@ class Router {
 
     const dir get_send_dir(int dy, int dx) const;
 
-    void try_send(dir send_dir, int gate, Package * package);
+    dir strategy(int gate, int dy, int dx);
+
+    bool try_send(dir send_dir, int gate, Package * package);
 
     dir get_closest_gate(int dy, int dx);
 

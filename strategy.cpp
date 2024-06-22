@@ -4,12 +4,13 @@
 
 namespace noc {
 
-void Router::try_send(dir send_dir, int gate, Package * package) {
+bool Router::try_send(dir send_dir, int gate, Package * package) {
     if (answers[send_dir]) {
         sends[gate] = new SendInfo(send_dir, package);
         answers[send_dir] = false;
-        return;
+        return true;
     }
+    return false;
 }
 
 // returns whether the g'th gate is to the left or right
@@ -29,39 +30,52 @@ dir Router::get_closest_gate(int dy, int dx) {
 
     if (dy > 0) { // W, E or S
 
-        if (dx > 0) {return dx > dy ? E : S;} // E or S
-        else {return -dx > dy ? W : S;} // W or S
+        if (dx > 0) {return dx > dy ? S : E;} // E or S
+        else {return -dx > dy ? S : W;} // W or S
 
     } else  { // W, E or N
 
-        if (dx > 0) {return dx > -dy ? E : N;} // E or N
-        else {return -dx > -dy ? W : N;} // W or N
+        if (dx > 0) {return dx > -dy ? N : E;} // E or N
+        else {return -dx > -dy ? N : W;} // W or N
     }
+}
+
+dir Router::strategy(int gate, int dy, int dx) {
+
+    dir send_dir;
+
+    switch(attempts[gate]) {
+        case 0:
+            send_dir = get_send_dir(dy, dx);
+            break;
+        //attempts #1 (Isaac's strategy™)
+        case 1:
+            send_dir = get_closest_gate(dy, dx);
+            break;
+        case 2:
+            break;
+    }
+
+    return send_dir;
 }
 
 void Router::judge(int dy, int dx, int gate, Package * package) {
     // Deciding where to send
-    dir send_dir = get_send_dir(dy, dx);
+    dir send_dir;
+    send_dir = strategy(gate, dy, dx);
 
-    try_send(send_dir, gate, package);
-    // TODO: smarter logic
-
-    if (!asked[gate]) {
-        ask(send_dir);
-    }
-    else {
-        asked[gate] = false;
-        // Search new path
-
-        switch(attempts[gate]) {
-        //attempts #1 (Isaac's strategy TM)
-            case 0:
-                send_dir = get_closest_gate(dy, dx);
-                try_send(send_dir, gate, package);
-                break;
-
+    if (try_send(send_dir, gate, package)) {
+        for (int i{0};i < 4;i ++) {
+            asked[i] = false;
         }
+        attempts[gate] = 0;
+        return;
     }
+
+    if (asked[send_dir]) ++ attempts[gate];
+    send_dir = strategy(gate, dy, dx);
+    ask(send_dir);
+    asked[send_dir] = true;
 }
 
 const dir Router::get_send_dir(int dy, int dx) const {
