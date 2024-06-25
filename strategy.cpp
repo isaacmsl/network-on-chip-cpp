@@ -6,7 +6,6 @@ namespace noc {
 
 bool Router::try_send(dir send_dir, int gate, Package * package) {
     if (answers[send_dir]) {
-        package->add_to_history(this->id);
         sends[gate] = new SendInfo(send_dir, package);
         answers[send_dir] = false;
         return true;
@@ -111,7 +110,7 @@ const dir Router::get_send_dir(int dy, int dx) const {
         return_dir = dx > 0 ? E : W;
     }
 
-    std::cout << dy << " "<< dx << " " << return_dir << '\n';
+    //std::cout << dy << " "<< dx << " " << return_dir << '\n';
 
     return return_dir;
 }

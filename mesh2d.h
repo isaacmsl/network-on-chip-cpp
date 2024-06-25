@@ -1,6 +1,7 @@
 #ifndef MESH2D_H
 #define MESH2D_H
 
+#include <cstdlib> 
 #include "router.h"
 
 namespace noc {
@@ -9,6 +10,8 @@ class Mesh2D {
  private:
     Router *** mesh;
     int w, h;
+    bool do_populate;
+    int populate_intensity;
 
  public:
     Mesh2D(int w, int h) {
@@ -22,6 +25,8 @@ class Mesh2D {
         for (int i{0};i < h;i ++) {
             this->mesh[i] = new Router*[w];
         }
+
+        this->do_populate = false;
 
         // Creating Routers
 
@@ -62,6 +67,11 @@ class Mesh2D {
     void spawn_package(int y, int x, int2 destination, int body = 0) {
         get(y, x)->spawn_package(destination, body);}
 
+    void populate(bool active, int intensity) {
+        this->do_populate = active;
+        this->populate_intensity = intensity;
+    }
+
     const void print() const {
         for (int i{0};i < h;i ++) {
         for (int j{0};j < w;j ++) {
@@ -89,6 +99,29 @@ class Mesh2D {
         for(int i{0}; i < h; ++i) {
         for (int j{0}; j < w; ++j) {
             get(i, j)->ack();
+        }}
+
+        if (do_populate) {
+        for(int i{0}; i < h; ++i) {
+        for (int j{0}; j < w; ++j) {
+
+        float chances[3] = {0.01f, 0.1f, 0.3f};
+
+        if ((rand() % 1000)/1000.0f <= chances[populate_intensity - 1]) {
+
+            int2 rnd_dest{
+                (i + ((rand() + 1) % (h - 1))) % h,
+                (j + ((rand() + 1) % (w - 1))) % w};
+
+            spawn_package(i, j, rnd_dest, rand() % 1024);
+
+        }}}}
+    }
+
+    void print_package_info() {
+        for(int i{0}; i < h; ++i) {
+        for (int j{0}; j < w; ++j) {
+            get(i, j)->print_package_info();
         }}
     }
 

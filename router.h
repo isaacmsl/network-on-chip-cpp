@@ -110,8 +110,11 @@ class Router {
     // sends 'package' to 'neighbour'
     void send_package(int neighbour, Package * package) {
         int neighbour_queue = fx(neighbour);
-        if (neighbours[neighbour] != NULL)
+        if (neighbours[neighbour] != NULL) {
+            package->add_to_history(this->id);
+            package->age();
             neighbours[neighbour]->add_to_queue(neighbour_queue, package);
+        }
     }
 
     // router logic
@@ -126,7 +129,7 @@ class Router {
     void send() {
     for (int i{0}; i < n_neighbours; ++i) {
         if (sends[i] != NULL) {
-            std::cout << "did it " << id << '\n';
+            //std::cout << "did it " << id << '\n';
             send_package(sends[i]->send_dir, sends[i]->pkg);
             remove_from_queue(i, sends[i]->pkg);
             sends[i] = NULL;
@@ -240,7 +243,12 @@ class Router {
 
     // add a package to some queue
     void spawn_package(int2 destination, int body) {
-        add_to_queue(0, new Package(destination, body));}
+
+        int queue = destination[0] > pos[0] ? 
+                    0 : (destination[0] < pos[0] ? 
+                    2 : (destination[1] > pos[1]) ? 3 : 1);
+
+        add_to_queue(queue, new Package(destination, body));}
 
     /// === Destructor ===
 
@@ -263,6 +271,14 @@ class Router {
         if (!active) return 'x';
         if (has_package()) return '0' + package_count();
         return 'o';
+    }
+
+    const void print_package_info() {
+        for (int i = 0;i < n_neighbours;i ++) {
+        for (int j{0};j < queue_size;j ++) {
+            if (queues[i][j] != NULL)
+                queues[i][j]->print_info(this->id, pos, i, j);
+        }}
     }
 
 };
