@@ -7,7 +7,7 @@
 using int2 = std::array<int, 2>;
 
 enum dir {
-    N, E, S, W
+    N, E, S, W, X
 };
 
 class Mesh2D;

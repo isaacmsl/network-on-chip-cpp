@@ -155,6 +155,8 @@ class Router {
         judge(dy, dx, gate, package);
     }
 
+    dir avoid_starvation(Package * package);
+
     void judge(int dy, int dx, int gate, Package * package);
 
     const dir get_send_dir(int dy, int dx) const;

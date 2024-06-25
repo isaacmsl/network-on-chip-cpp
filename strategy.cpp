@@ -6,6 +6,7 @@ namespace noc {
 
 bool Router::try_send(dir send_dir, int gate, Package * package) {
     if (answers[send_dir]) {
+        package->add_to_history(this->id);
         sends[gate] = new SendInfo(send_dir, package);
         answers[send_dir] = false;
         return true;
@@ -66,18 +67,32 @@ dir Router::strategy(int gate, int dy, int dx) {
     return send_dir;
 }
 
+dir Router::avoid_starvation(Package * package) {
+    int next_router_id_loop = package->check_loop(this->id);
+    if (next_router_id_loop != -1) {
+        for (int i{0}; i < this->n_neighbours; ++i) {
+            if (this->neighbours[i]->id == next_router_id_loop) {
+                return (dir) i;
+            }
+        }
+    }
+    return X;
+}
+
 void Router::judge(int dy, int dx, int gate, Package * package) {
     // Deciding where to send
     dir send_dir;
+    dir avoid_dir = avoid_starvation(package);
     send_dir = strategy(gate, dy, dx);
-
-    if (try_send(send_dir, gate, package)) {
+    if (avoid_dir == send_dir) {
+        asked[send_dir] = true;
+    } else if (try_send(send_dir, gate, package)) {
         for (int i{0};i < 4;i ++) {
             asked[i] = false;
         }
         attempts[gate] = 0;
         return;
-    }
+    }   
 
     if (asked[send_dir]) ++ attempts[gate];
     send_dir = strategy(gate, dy, dx);
