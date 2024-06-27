@@ -120,10 +120,10 @@ class Router {
     // router logic
     void step() {
         if (!this->active) return;
+
         for (int i{0}; i < n_neighbours; ++i) {
-            if (package_count(i)) {
+            if (package_count(i))
                 process_pkg(i);
-            }
         }
     }
 
@@ -131,7 +131,6 @@ class Router {
     void send() {
     for (int i{0}; i < n_neighbours; ++i) {
         if (sends[i] != NULL) {
-            //std::cout << "did it " << id << '\n';
             send_package(sends[i]->send_dir, sends[i]->pkg);
             remove_from_queue(i, sends[i]->pkg);
             sends[i] = NULL;
@@ -167,8 +166,6 @@ class Router {
     const dir get_send_dir(int dy, int dx) const;
 
     dir strategy(int gate, int dy, int dx);
-
-    bool try_send(dir send_dir, int gate, Package * package);
 
     dir get_closest_gate(int dy, int dx);
 

@@ -4,16 +4,6 @@
 
 namespace noc {
 
-bool Router::try_send(dir send_dir, int gate, Package * package) {
-    std::cout << "Try send to " << send_dir << " answer " << answers[send_dir] << '\n';
-    if (answers[send_dir]) {
-        sends[gate] = new SendInfo(send_dir, package);
-        answers[send_dir] = false;
-        return true;
-    }
-    return false;
-}
-
 // returns whether the g'th gate is to the left or right
 int gx(int g) {
     if (g % 2 == 0) return 0;
@@ -28,7 +18,6 @@ int gy(int g) {
 
 // returns the direction of the closest gate from 'gate' to 'dy dx'
 dir Router::get_closest_gate(int dy, int dx) {
-
     if (dy > 0) { // W, E or S
 
         if (dx > 0) {return dx > dy ? S : E;} // E or S
@@ -41,21 +30,22 @@ dir Router::get_closest_gate(int dy, int dx) {
     }
 }
 
-static dir last_dir;
+static dir last_dir = X;
 
 dir Router::strategy(int gate, int dy, int dx) {
 
     dir send_dir = last_dir;
 
     switch(attempts[gate]) {
+        // optimal choice
         case 0:
             send_dir = get_send_dir(dy, dx);
             break;
-        //attempts #1 (Isaac's strategy™)
+        //attempt #1 (Isaac's strategy™)
         case 1:
             send_dir = get_closest_gate(dy, dx);
             break;
-        //attempts #2 (Carlos's strategy™)
+        //attempt #2 (Carlos's strategy™)
         case 2:
             for (int i{0};i < 4;i ++) {
             if (i != gate && !asked[i]) {
@@ -80,34 +70,47 @@ dir Router::avoid_starvation(Package * package) {
 }
 
 void Router::judge(int dy, int dx, int gate, Package * package) {
-    // Deciding where to send
-    std::cout<<"hey brother\n";
-    dir send_dir;
-    dir avoid_dir = avoid_starvation(package);
-    std::cout << "Avoid dir: " << avoid_dir << '\n';
-    send_dir = strategy(gate, dy, dx);
 
-    if (avoid_dir == send_dir) {
-        std::cout << "EU TENHO QUE EVITAR" << send_dir << '\n';
+    if (attempts[gate] > 3) attempts[gate] = 0;
+
+    // Deciding where to send
+    dir send_dir = strategy(gate, dy, dx);
+    dir avoid_dir = avoid_starvation(package);
+
+    //std::cout << "attempt: " << attempts[gate] << '\n';
+    //std::cout << "i want to go: " << send_dir << " answer: " << answers[send_dir] <<  '\n';
+    //std::cout << "i want to avoid: " << avoid_dir << '\n';
+
+    if (send_dir == avoid_dir || send_dir == gate) {
+        // send_dir will lead to a loop, trying another route
         asked[send_dir] = true;
-    } else if (try_send(send_dir, gate, package)) {
-        std::cout << "TRY SEND!!!!\n";
-        for (int i{0};i < 4;i ++) {
-            asked[i] = false;
-        }
+        ++ attempts[gate];
+        send_dir = strategy(gate, dy, dx);
+
+        //std::cout << "new i want to go: " << send_dir << '\n';
+
+    } else if (answers[send_dir]) {
+        // Registering package for dispatch
+        sends[gate] = new SendInfo(send_dir, package);
+
+        // Reseting variables
+        for (int i{0};i < 4;++ i) {asked[i] = false;}
         attempts[gate] = 0;
+        answers[send_dir] = false;
+
         return;
-    }   
-    
-    std::cout << "I want to send " << send_dir << '\n';
-    if (asked[send_dir]) ++ attempts[gate];
-    send_dir = strategy(gate, dy, dx);
-    std::cout << "I want to send " << send_dir << '\n';
+
+    } else {
+        // Failed to send, registering an attempt
+        if (asked[send_dir]) {++ attempts[gate];}
+        else {asked[send_dir] = true;}
+    }
+
     ask(send_dir);
-    asked[send_dir] = true;
     last_dir = send_dir;
 }
 
+// Optimal sending direction
 const dir Router::get_send_dir(int dy, int dx) const {
     dir return_dir;
 
@@ -117,8 +120,6 @@ const dir Router::get_send_dir(int dy, int dx) const {
     else if (dx != 0) {
         return_dir = dx > 0 ? E : W;
     }
-
-    //std::cout << dy << " "<< dx << " " << return_dir << '\n';
 
     return return_dir;
 }
