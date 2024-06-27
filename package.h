@@ -42,20 +42,22 @@ class Package {
       }
 
       this->history[0] = router_id;
+
+      for (int i{0}; i < HISTORY_SIZE;++i) {
+         std::cout << "History " << history[i] << '\n';
+      }
     }
 
     const int check_loop(int router_id) {
-
-      return -1;
-
       int count[MAX_SIZE_IDS];
       for (int i{0}; i < MAX_SIZE_IDS; ++i)
          count[i] = 0;
 
       for (int i{0}; i < HISTORY_SIZE; ++i) {
+         if (history[i] == -1) continue;
          ++count[history[i]];
          if (count[history[i]] > 1) {
-            for (int j{i}; i >= 0; --i) {
+            for (int j{i}; j >= 0; --j) {
                if (history[j] == router_id)
                   return history[j + 1];
             }

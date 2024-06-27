@@ -5,6 +5,7 @@
 namespace noc {
 
 bool Router::try_send(dir send_dir, int gate, Package * package) {
+    std::cout << "Try send to " << send_dir << " answer " << answers[send_dir] << '\n';
     if (answers[send_dir]) {
         sends[gate] = new SendInfo(send_dir, package);
         answers[send_dir] = false;
@@ -70,7 +71,7 @@ dir Router::avoid_starvation(Package * package) {
     int next_router_id_loop = package->check_loop(this->id);
     if (next_router_id_loop != -1) {
         for (int i{0}; i < this->n_neighbours; ++i) {
-            if (this->neighbours[i]->id == next_router_id_loop) {
+            if (this->neighbours[i] != NULL && this->neighbours[i]->id == next_router_id_loop) {
                 return (dir) i;
             }
         }
@@ -80,21 +81,28 @@ dir Router::avoid_starvation(Package * package) {
 
 void Router::judge(int dy, int dx, int gate, Package * package) {
     // Deciding where to send
+    std::cout<<"hey brother\n";
     dir send_dir;
     dir avoid_dir = avoid_starvation(package);
+    std::cout << "Avoid dir: " << avoid_dir << '\n';
     send_dir = strategy(gate, dy, dx);
+
     if (avoid_dir == send_dir) {
+        std::cout << "EU TENHO QUE EVITAR" << send_dir << '\n';
         asked[send_dir] = true;
     } else if (try_send(send_dir, gate, package)) {
+        std::cout << "TRY SEND!!!!\n";
         for (int i{0};i < 4;i ++) {
             asked[i] = false;
         }
         attempts[gate] = 0;
         return;
     }   
-
+    
+    std::cout << "I want to send " << send_dir << '\n';
     if (asked[send_dir]) ++ attempts[gate];
     send_dir = strategy(gate, dy, dx);
+    std::cout << "I want to send " << send_dir << '\n';
     ask(send_dir);
     asked[send_dir] = true;
     last_dir = send_dir;
