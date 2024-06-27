@@ -169,6 +169,8 @@ class Router {
 
     dir get_closest_gate(int dy, int dx);
 
+    void reset_judge_variables(int gate, dir send_dir);
+
     /// === Queue & Packages ===
 
     Package * get_senior_package_in_queue(int queue) {

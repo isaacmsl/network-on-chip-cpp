@@ -42,7 +42,7 @@ int main() {
                 {
                     int y, x, dy, dx, body;
 
-                    std::cout << "type: y x dx dy body \n";
+                    std::cout << "type: y x dy dx body \n";
 
                     std::cin >> y >> x >> dy >> dx >> body;
 

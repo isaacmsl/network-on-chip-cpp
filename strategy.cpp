@@ -41,16 +41,28 @@ dir Router::strategy(int gate, int dy, int dx) {
         case 0:
             send_dir = get_send_dir(dy, dx);
             break;
+        
         //attempt #1 (Isaac's strategy™)
         case 1:
             send_dir = get_closest_gate(dy, dx);
             break;
+        
         //attempt #2 (Carlos's strategy™)
-        case 2:
+        default:
+            
+            bool found_gate = false;
+
             for (int i{0};i < 4;i ++) {
             if (i != gate && !asked[i]) {
                 send_dir = (dir) i;
+                found_gate = true;
+                break;
             }}
+
+            if (!found_gate) {
+                reset_judge_variables(gate, send_dir);
+            }
+
             break;
     }
 
@@ -70,8 +82,6 @@ dir Router::avoid_starvation(Package * package) {
 }
 
 void Router::judge(int dy, int dx, int gate, Package * package) {
-
-    if (attempts[gate] > 3) attempts[gate] = 0;
 
     // Deciding where to send
     dir send_dir = strategy(gate, dy, dx);
@@ -93,10 +103,7 @@ void Router::judge(int dy, int dx, int gate, Package * package) {
         // Registering package for dispatch
         sends[gate] = new SendInfo(send_dir, package);
 
-        // Reseting variables
-        for (int i{0};i < 4;++ i) {asked[i] = false;}
-        attempts[gate] = 0;
-        answers[send_dir] = false;
+        reset_judge_variables(gate, send_dir);
 
         return;
 
@@ -108,6 +115,12 @@ void Router::judge(int dy, int dx, int gate, Package * package) {
 
     ask(send_dir);
     last_dir = send_dir;
+}
+
+void Router::reset_judge_variables(int gate, dir send_dir) {
+    for (int i{0};i < 4;++ i) {asked[i] = false;}
+    attempts[gate] = 0;
+    answers[send_dir] = false;
 }
 
 // Optimal sending direction
