@@ -119,11 +119,13 @@ class Router {
 
     // router logic
     void step() {
-    for (int i{0}; i < n_neighbours; ++i) {
-        if (package_count(i)) {
-            process_pkg(i);
+        if (!this->active) return;
+        for (int i{0}; i < n_neighbours; ++i) {
+            if (package_count(i)) {
+                process_pkg(i);
+            }
         }
-    }}
+    }
 
     // sends pending packages in 'sends' array
     void send() {
