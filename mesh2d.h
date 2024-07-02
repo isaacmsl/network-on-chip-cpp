@@ -85,7 +85,6 @@ class Mesh2D {
 
     double update_arrival_rate() {
         arrival_rate = ((steps - 1) * arrival_rate + pkgs_per_step)/((double) steps);
-        std::cout << arrival_rate << '\n';
         return arrival_rate;
     }
 

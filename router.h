@@ -82,8 +82,7 @@ class Router {
 
     /// === Interaction with other Routers ===
 
-    // Gets index of the 'neighbour' gate that is facing
-    // towards this router.
+    // Gets index of the 'neighbour' gate that is facing towards this router.
     const int fx(int neighbour) const {return (neighbour + 2) % 4;}
 
     const void ask(int neighbour) const {
@@ -92,7 +91,7 @@ class Router {
             neighbours[neighbour]->questions[neighbour_queue] = true;
         }
         else {
-            std::cout << "Non-existent neighbour\n";
+            std::cout << "Non-existent neighbour!\n";
         }
     }
 
@@ -149,7 +148,8 @@ class Router {
 
         // Package arrived at final destination
         if (dy == 0 && dx == 0) {
-            std::cout << "Gatão pego! " << package->get_body() << "\n";
+            std::cout << "Package with body " << package->get_body();
+            std::cout << " and age: " << package->get_age() << " arrived!" << "\n";
             ++ pkgs_per_step;
             remove_from_queue(gate, package);
             delete package;
@@ -192,7 +192,7 @@ class Router {
             }
         }
 
-        std::cout << "Vixe! O queue " << id << " tava cheio o_o\n";
+        std::cout << "The queue " << queue << " from router " << id << " is full!\n";
     }
 
     void remove_from_queue(int queue, int pos) {
@@ -250,7 +250,8 @@ class Router {
                     0 : (destination[0] < pos[0] ? 
                     2 : (destination[1] > pos[1]) ? 3 : 1);
 
-        add_to_queue(queue, new Package(destination, body));}
+        add_to_queue(queue, new Package(destination, body));
+    }
 
     /// === Destructor ===
 

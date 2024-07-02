@@ -37,17 +37,17 @@ dir Router::strategy(int gate, int dy, int dx) {
     dir send_dir = last_dir;
 
     switch(attempts[gate]) {
-        // optimal choice
+        // Optimal choice
         case 0:
             send_dir = get_send_dir(dy, dx);
             break;
         
-        //attempt #1 (Isaac's strategy™)
+        // Attempt #1 (Isaac's strategy™)
         case 1:
             send_dir = get_closest_gate(dy, dx);
             break;
         
-        //attempt #2 (Carlos's strategy™)
+        // Attempt #2 (Carlos's strategy™)
         default:
             
             bool found_gate = false;
@@ -87,17 +87,11 @@ void Router::judge(int dy, int dx, int gate, Package * package) {
     dir send_dir = strategy(gate, dy, dx);
     dir avoid_dir = avoid_starvation(package);
 
-    //std::cout << "attempt: " << attempts[gate] << '\n';
-    //std::cout << "i want to go: " << send_dir << " answer: " << answers[send_dir] <<  '\n';
-    //std::cout << "i want to avoid: " << avoid_dir << '\n';
-
     if (send_dir == avoid_dir || send_dir == gate) {
         // send_dir will lead to a loop, trying another route
         asked[send_dir] = true;
         ++ attempts[gate];
         send_dir = strategy(gate, dy, dx);
-
-        //std::cout << "new i want to go: " << send_dir << '\n';
 
     } else if (answers[send_dir]) {
         // Registering package for dispatch
