@@ -6,6 +6,7 @@ int main() {
     noc::Mesh2D m = noc::Mesh2D(8, 8);
     bool quit = false;
     int step = 0;
+    double arrival_rate = 1;
 
     while (!quit) {
 
@@ -16,7 +17,7 @@ int main() {
 
         while (!next_step && !quit) {
 
-            std::cout << "step: " << step << '\n';
+            std::cout << "step: " << step << ' ' << "arrival rate: " << arrival_rate << '\n';
             std::cout << "0 - next step\n";
             std::cout << "1 - insert package\n";
             std::cout << "2 - de/activate router\n";
@@ -102,6 +103,8 @@ int main() {
                     quit = true;
                     break;
             }
+
+            arrival_rate = m.update_arrival_rate();
 
             std::cout << '\n';
 

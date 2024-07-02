@@ -12,6 +12,8 @@ class Mesh2D {
     int w, h;
     bool do_populate;
     int populate_intensity;
+    double arrival_rate = 1;
+    int steps = 1;
 
  public:
     Mesh2D(int w, int h) {
@@ -81,7 +83,16 @@ class Mesh2D {
         }
     }
 
+    double update_arrival_rate() {
+        arrival_rate = ((steps - 1) * arrival_rate + pkgs_per_step)/((double) steps);
+        std::cout << arrival_rate << '\n';
+        return arrival_rate;
+    }
+
     void step() {
+
+        pkgs_per_step = 0;
+        steps ++;
 
         // step
         for(int i{0}; i < h; ++i) {

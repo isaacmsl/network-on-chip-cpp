@@ -14,4 +14,6 @@ class Mesh2D;
 class Router;
 class Package;
 
+static int pkgs_per_step = 0;
+
 #endif

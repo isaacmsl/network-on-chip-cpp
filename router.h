@@ -150,6 +150,7 @@ class Router {
         // Package arrived at final destination
         if (dy == 0 && dx == 0) {
             std::cout << "Gatão pego! " << package->get_body() << "\n";
+            ++ pkgs_per_step;
             remove_from_queue(gate, package);
             delete package;
             return;
@@ -283,5 +284,6 @@ class Router {
     }
 
 };
+
 }
 #endif
