@@ -1,0 +1,583 @@
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 0 arrival rate: 1
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+1
+type: y x dy dx body 
+0 0 7 7 1
+
+step: 0 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 1 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 2 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 3 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 4 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 5 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 6 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 7 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 8 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 9 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 10 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 11 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+step: 12 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+00
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+o o o o o o o o 
+step: 13 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+step: 14 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+1 o o o o o o o 
+step: 15 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o 1 o o o o o o 
+step: 16 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o 1 o o o o o o 
+step: 17 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o 1 o o o o o 
+step: 18 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o 1 o o o o o 
+step: 19 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o 1 o o o o 
+step: 20 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o 1 o o o o 
+step: 21 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o 1 o o o 
+step: 22 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o 1 o o o 
+step: 23 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o 1 o o 
+step: 24 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o 1 o o 
+step: 25 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o 1 o 
+step: 26 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o 1 o 
+step: 27 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+
+Esse teste simula o comportamento padrão de estratégia de envio de um pacote para um router: YX.
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o 1 
+step: 28 arrival rate: 0
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
+0
+Package with body 1 and age: 14 arrived!
+
+---------------
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+o o o o o o o o 
+step: 29 arrival rate: 0.0333333
+0 - next step
+1 - insert package
+2 - de/activate router
+3 - populate
+4 - package info
+5 - next step + package info
+6 - quit
